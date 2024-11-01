@@ -38,13 +38,13 @@ module.exports = {
             if (!err) {
                 res.json(results);
             } else {
-                res.status(500).json({ message: "Error al obtener las ventas" });
+                res.status(500).json({ message: "Error al obtener las rentas" });
             }
             connection.end();
         });
     } catch (e) {
         console.log(e);
-        res.status(500).json({ message: "Error al obtener las ventas" });
+        res.status(500).json({ message: "Error al obtener las rentas" });
     }
 },
 
