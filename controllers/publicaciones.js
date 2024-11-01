@@ -1,4 +1,82 @@
+const mysql = require("mysql2");
+const connectionObject = {
+  host: "localhost",
+  user: "root",
+  password: "AlbedoLLL3",
+  database: "urhomeCUU2",
+};
 module.exports = {
+  getPublicaciones: (req, res) => {
+    let publicaciones = [];
+    try {
+      const connection = mysql.createConnection(connectionObject);
+      connection.query("SELECT * FROM publicaciones", (err, results, fields) => {
+        if (!err) {
+          publicaciones = results;
+          res.json(publicaciones);
+        } else {
+          res.json({ message: "Error al obtener las publicaciones" });
+        }
+        connection.end();
+      });
+    } catch (e) {
+      console.log(e);
+      res.json({ message: "Error al obtener las publicaciones" });
+    }
+  },
+    getPublicacion: (req, res) => {
+    const { id } = req.params;
+    let query = "SELECT * FROM publicaciones";
+    let queryParams = [];
+    if (id) {
+        query += " WHERE id_publicacion = ?"; // Suponiendo que el campo del ID en la tabla es 'id_inmueble'
+        queryParams.push(id);
+    }
+    try {
+        const connection = mysql.createConnection(connectionObject);
+        connection.query(query, queryParams, (err, results, fields) => {
+            if (!err) {
+                res.json(results);
+            } else {
+                res.status(500).json({ message: "Error al obtener las publicaciones" });
+            }
+            connection.end();
+        });
+    } catch (e) {
+        console.log(e);
+        res.status(500).json({ message: "Error al obtener las publicaciones" });
+    }
+},
+postPublicacion: (req, res) => {
+  try {
+      const { vendedor_id, img_src, descripcion, titulo } = req.body;
+
+      if (!vendedor_id || !img_src || !descripcion || !titulo) {
+          return res.status(400).json({ message: "Todos los campos son requeridos" });
+      }
+      const connection = mysql.createConnection(connectionObject);
+
+      const query = "INSERT INTO publicaciones (vendedor_id, img_src, descripcion, titulo) VALUES (?, ?, ?, ?)";
+      const values = [vendedor_id, img_src, descripcion, titulo];
+
+      connection.query(query, values, (err, results) => {
+          if (!err) {
+              res.status(201).json({ message: "Publicación guardada", id: results.insertId });
+          } else {
+              console.error("Error al guardar la publicación:", err);
+              res.status(500).json({ message: "Error al guardar la publicación" });
+          }
+          connection.end();
+      });
+  } catch (e) {
+      console.error("Error al guardar la publicación:", e);
+      res.status(500).json({ message: "Error al guardar la publicación" });
+  }
+},
+
+
+};
+/*module.exports = {
     getPublicaciones: (req, res) => {
       const placeholder = [
         {
@@ -197,3 +275,4 @@ module.exports = {
     },
     area: 7,
   };
+  */

@@ -1,4 +1,55 @@
+const mysql = require("mysql2");
+const connectionObject = {
+  host: "localhost",
+  user: "root",
+  password: "AlbedoLLL3",
+  database: "urhomeCUU2",
+};
 module.exports = {
+  getVendedores: (req, res) => {
+    let vendedores = [];
+    try {
+      const connection = mysql.createConnection(connectionObject);
+      connection.query("SELECT * FROM vendedores", (err, results, fields) => {
+        if (!err) {
+          vendedores = results;
+          res.json(vendedores);
+        } else {
+          res.json({ message: "Error al obtener a los vendedores" });
+        }
+        connection.end();
+      });
+    } catch (e) {
+      console.log(e);
+      res.json({ message: "Error al obtener a los vendedores" });
+    }
+  },
+    getVendedor: (req, res) => {
+    const { id } = req.params;
+    let query = "SELECT * FROM vendedores";
+    let queryParams = [];
+    if (id) {
+        query += " WHERE id_vendedor = ?";
+        queryParams.push(id);
+    }
+    try {
+        const connection = mysql.createConnection(connectionObject);
+        connection.query(query, queryParams, (err, results, fields) => {
+            if (!err) {
+                res.json(results);
+            } else {
+                res.status(500).json({ message: "Error al obtener los vendedores" });
+            }
+            connection.end();
+        });
+    } catch (e) {
+        console.log(e);
+        res.status(500).json({ message: "Error al obtener a los vendedores" });
+    }
+},
+
+};
+/*module.exports = {
     getVendedor: (req, res) => {
       const id = req.params.id;
       const vendedor = {
@@ -106,3 +157,4 @@ module.exports = {
       res.json(vendors);
     }
   };
+  */

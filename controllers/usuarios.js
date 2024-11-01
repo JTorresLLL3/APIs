@@ -1,4 +1,55 @@
+const mysql = require("mysql2");
+const connectionObject = {
+  host: "localhost",
+  user: "root",
+  password: "AlbedoLLL3",
+  database: "urhomeCUU2",
+};
 module.exports = {
+  getUsuarios: (req, res) => {
+    let usuarios = [];
+    try {
+      const connection = mysql.createConnection(connectionObject);
+      connection.query("SELECT * FROM usuarios", (err, results, fields) => {
+        if (!err) {
+          usuarios = results;
+          res.json(usuarios);
+        } else {
+          res.json({ message: "Error al obtener a los usuarios" });
+        }
+        connection.end();
+      });
+    } catch (e) {
+      console.log(e);
+      res.json({ message: "Error al obtener a los usuarios" });
+    }
+  },
+    getUsuario: (req, res) => {
+    const { id } = req.params;
+    let query = "SELECT * FROM usuarios";
+    let queryParams = [];
+    if (id) {
+        query += " WHERE id_usuario = ?";
+        queryParams.push(id);
+    }
+    try {
+        const connection = mysql.createConnection(connectionObject);
+        connection.query(query, queryParams, (err, results, fields) => {
+            if (!err) {
+                res.json(results);
+            } else {
+                res.status(500).json({ message: "Error al obtener los usuarios" });
+            }
+            connection.end();
+        });
+    } catch (e) {
+        console.log(e);
+        res.status(500).json({ message: "Error al obtener a los usuarios" });
+    }
+},
+
+};
+/*module.exports = {
     getUser: (req, res) => {
       const id = req.params.id;
       const users = {
@@ -106,3 +157,4 @@ module.exports = {
       res.json(user);
     }
   };
+  */

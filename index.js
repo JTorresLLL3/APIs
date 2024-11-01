@@ -1,7 +1,7 @@
 const publicacionesController = require("./controllers/publicaciones");
-const userController = require("./controllers/user");
-/*const ventaController = require("./controllers/venta");
-const rentaController = require("./controllers/renta");*/
+const usuariosController = require("./controllers/usuarios");
+const ventaController = require("./controllers/venta");
+//const rentaController = require("./controllers/renta");
 const vendedoresController = require("./controllers/vendedores");
 const inmueblesController = require("./controllers/inmuebles");
 const bodyParser = require("body-parser");
@@ -19,21 +19,23 @@ app.get("/publicaciones", publicacionesController.getPublicaciones);
 app.post("/publicacion", jsonParser, publicacionesController.postPublicacion);
 
 //usuarios
-app.get("/user/:id", userController.getUser);
-app.get("/user", userController.getUsers);
+app.get("/usuarios/:id", usuariosController.getUsuario);
+app.get("/usuarios", usuariosController.getUsuarios);
 
 //vendedores
 app.get("/vendedores/:id", vendedoresController.getVendedor);
 app.get("/vendedores", vendedoresController.getVendedores);
 
 //inmuebles
+app.get("/inmuebles/:id", inmueblesController.getInmueble);
 app.get("/inmuebles", inmueblesController.getInmuebles);
 
-/*
+
 //venta
 app.get("/venta/:id", ventaController.getVenta)
 app.get("/venta", ventaController.getVentas)
 
+/*
 //renta
 app.get("/renta/:id", rentaController.getRenta)
 app.get("/renta", rentaController.getRentas)
