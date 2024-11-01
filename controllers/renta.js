@@ -1,4 +1,4 @@
-/*const mysql = require("mysql2");
+const mysql = require("mysql2");
 const connectionObject = {
   host: "localhost",
   user: "root",
@@ -49,4 +49,3 @@ module.exports = {
 },
 
 };
-*/

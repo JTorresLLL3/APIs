@@ -1,7 +1,7 @@
 const publicacionesController = require("./controllers/publicaciones");
 const usuariosController = require("./controllers/usuarios");
 const ventaController = require("./controllers/venta");
-//const rentaController = require("./controllers/renta");
+const rentaController = require("./controllers/renta");
 const vendedoresController = require("./controllers/vendedores");
 const inmueblesController = require("./controllers/inmuebles");
 const bodyParser = require("body-parser");
@@ -30,17 +30,13 @@ app.get("/vendedores", vendedoresController.getVendedores);
 app.get("/inmuebles/:id", inmueblesController.getInmueble);
 app.get("/inmuebles", inmueblesController.getInmuebles);
 
-
 //venta
 app.get("/venta/:id", ventaController.getVenta)
 app.get("/venta", ventaController.getVentas)
 
-/*
 //renta
 app.get("/renta/:id", rentaController.getRenta)
 app.get("/renta", rentaController.getRentas)
-
-*/
 
 
 //Escuchar peticiones en el puerto 5500
