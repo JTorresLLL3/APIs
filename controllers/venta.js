@@ -2,7 +2,7 @@ const mysql = require("mysql2");
 const connectionObject = {
   host: "localhost",
   user: "root",
-  password: "AlbedoLLL3",
+  password: "goldenstate777*",
   database: "urhomeCUU2",
 };
 module.exports = {
@@ -10,7 +10,7 @@ module.exports = {
     let ventas = [];
     try {
       const connection = mysql.createConnection(connectionObject);
-      connection.query("SELECT * FROM ventas", (err, results, fields) => {
+      connection.query("SELECT * FROM venta_publicaciones", (err, results, fields) => {
         if (!err) {
           ventas = results;
           res.json(ventas);
@@ -26,10 +26,10 @@ module.exports = {
   },
     getVenta: (req, res) => {
     const { id } = req.params;
-    let query = "SELECT * FROM ventas";
+    let query = "SELECT * FROM venta_publicaciones";
     let queryParams = [];
     if (id) {
-        query += " WHERE id_venta = ?";
+        query += " WHERE id_publicacion_venta = ?";
         queryParams.push(id);
     }
     try {

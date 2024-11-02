@@ -2,7 +2,7 @@ const mysql = require("mysql2");
 const connectionObject = {
   host: "localhost",
   user: "root",
-  password: "AlbedoLLL3",
+  password: "goldenstate777*",
   database: "urhomeCUU2",
 };
 module.exports = {
