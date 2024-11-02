@@ -21,6 +21,7 @@ app.post("/publicacion", jsonParser, publicacionesController.postPublicacion);
 //usuarios
 app.get("/usuarios/:id", usuariosController.getUsuario);
 app.get("/usuarios", usuariosController.getUsuarios);
+app.get("/usuarios/:id/favoritos", usuariosController.getFavoritos); 
 
 //vendedores
 app.get("/vendedores/:id", vendedoresController.getVendedor);

@@ -2,7 +2,7 @@ const mysql = require("mysql2");
 const connectionObject = {
   host: "localhost",
   user: "root",
-  password: "AlbedoLLL3",
+  password: "goldenstate777*",
   database: "urhomeCUU2",
 };
 module.exports = {
@@ -46,6 +46,31 @@ module.exports = {
         console.log(e);
         res.status(500).json({ message: "Error al obtener a los usuarios" });
     }
+},
+getFavoritos: (req, res) => {
+  const { id } = req.params; // Cambia a 'id' si estás usando /usuarios/:id/favoritos
+  const query = `
+    SELECT p.*
+    FROM favoritos f
+    JOIN publicaciones p ON f.fk_publicacion = p.id_publicacion
+    WHERE f.fk_usuario = ?
+  `;
+  
+  try {
+    const connection = mysql.createConnection(connectionObject);
+    connection.query(query, [id], (err, results, fields) => {
+      if (!err) {
+        console.log("Resultados de favoritos:", results); // Verifica si hay datos en results
+        res.json(results);
+      } else {
+        res.status(500).json({ message: "Error al obtener las publicaciones favoritas" });
+      }
+      connection.end();
+    });
+  } catch (e) {
+    console.log(e);
+    res.status(500).json({ message: "Error al obtener las publicaciones favoritas" });
+  }
 },
 
 };
