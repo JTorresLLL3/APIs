@@ -22,22 +22,25 @@ app.post("/publicacion", jsonParser, publicacionesController.postPublicacion);
 app.get("/usuarios/:id", usuariosController.getUsuario);
 app.get("/usuarios", usuariosController.getUsuarios);
 app.get("/usuarios/:id/favoritos", usuariosController.getFavoritos); 
+app.post("/usuario", jsonParser, usuariosController.postUsuario);
 
 //vendedores
 app.get("/vendedores/:id", vendedoresController.getVendedor);
 app.get("/vendedores", vendedoresController.getVendedores);
+app.post("/vendedor", jsonParser, vendedoresController.postVendedor);
 
 //inmuebles
 app.get("/inmuebles/:id", inmueblesController.getInmueble);
 app.get("/inmuebles", inmueblesController.getInmuebles);
+app.post("/inmueble", jsonParser, inmueblesController.postInmueble);
 
 //venta
-app.get("/venta/:id", ventaController.getVenta)
-app.get("/venta", ventaController.getVentas)
+app.get("/venta/:id", ventaController.getVenta);
+app.get("/venta", ventaController.getVentas);
 
 //renta
-app.get("/renta/:id", rentaController.getRenta)
-app.get("/renta", rentaController.getRentas)
+app.get("/renta/:id", rentaController.getRenta);
+app.get("/renta", rentaController.getRentas);
 
 
 //Escuchar peticiones en el puerto 5500

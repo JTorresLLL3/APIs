@@ -72,8 +72,35 @@ getFavoritos: (req, res) => {
     res.status(500).json({ message: "Error al obtener las publicaciones favoritas" });
   }
 },
+postUsuario: (req, res) => {
+  const { nombre_usuario, apellidoP, apellidoM, correo_usuario, contraseña_usuario } = req.body;
 
+  const query = `
+      INSERT INTO usuarios (nombre_usuario, apellidoP, apellidoM, correo_usuario, contraseña_usuario)
+      VALUES (?, ?, ?, ?, ?)
+  `;
+  
+  try {
+      const connection = mysql.createConnection(connectionObject);
+      connection.query(query, [nombre_usuario, apellidoP, apellidoM, correo_usuario, contraseña_usuario], (err, results) => {
+          if (!err) {
+              res.status(201).json({ message: 'Usuario creado exitosamente', data: results });
+          } else {
+              res.status(500).json({ message: 'Error al crear el usuario' });
+          }
+          connection.end();
+      });
+  } catch (e) {
+      console.log(e);
+      res.status(500).json({ message: 'Error al crear el usuario' });
+  }
+
+},
 };
+
+//POST USUARIO: nombre_usuario, apellidoP, apellidoM, correo_usuario, contraseña_usuario
+//PUT USUARIO: nombre_usuario, apellidoP, apellidoM, correo_usuario, telefono_usuario, img_usuario_perfil
+
 /*module.exports = {
     getUser: (req, res) => {
       const id = req.params.id;

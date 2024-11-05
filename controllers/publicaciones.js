@@ -49,31 +49,89 @@ module.exports = {
 },
 postPublicacion: (req, res) => {
   try {
-      const { vendedor_id, img_src, descripcion, titulo } = req.body;
+      const {
+          titulo_publicacion,
+          descripcion_publicacion,
+          estado_publicacion,
+          fk_vendedor,
+          fk_inmueble
+      } = req.body;
 
-      if (!vendedor_id || !img_src || !descripcion || !titulo) {
-          return res.status(400).json({ message: "Todos los campos son requeridos" });
+      if (!titulo_publicacion || !descripcion_publicacion || estado_publicacion === undefined || 
+          !fk_vendedor || !fk_inmueble) {
+          return res.status(400).json({ 
+              message: "Todos los campos son requeridos",
+              required_fields: [
+                  "titulo_publicacion",
+                  "descripcion_publicacion",
+                  "estado_publicacion",
+                  "fk_vendedor",
+                  "fk_inmueble"
+              ]
+          });
       }
+
+      if (titulo_publicacion.length > 100) {
+          return res.status(400).json({ 
+              message: "El título no puede exceder los 100 caracteres" 
+          });
+      }
+
+      if (descripcion_publicacion.length > 250) {
+          return res.status(400).json({ 
+              message: "La descripción no puede exceder los 250 caracteres" 
+          });
+      }
+
       const connection = mysql.createConnection(connectionObject);
 
-      const query = "INSERT INTO publicaciones (vendedor_id, img_src, descripcion, titulo) VALUES (?, ?, ?, ?)";
-      const values = [vendedor_id, img_src, descripcion, titulo];
+      const query = `
+          INSERT INTO publicaciones (
+              titulo_publicacion,
+              descripcion_publicacion,
+              fecha_publicacion,
+              estado_publicacion,
+              fk_vendedor,
+              fk_inmueble
+          ) VALUES (?, ?, NOW(), ?, ?, ?)
+      `;
+
+      const values = [
+          titulo_publicacion,
+          descripcion_publicacion,
+          estado_publicacion,
+          fk_vendedor,
+          fk_inmueble
+      ];
 
       connection.query(query, values, (err, results) => {
-          if (!err) {
-              res.status(201).json({ message: "Publicación guardada", id: results.insertId });
-          } else {
+          if (err) {
               console.error("Error al guardar la publicación:", err);
-              res.status(500).json({ message: "Error al guardar la publicación" });
+              if (err.code === 'ER_NO_REFERENCED_ROW_2') {
+                  return res.status(400).json({ 
+                      message: "El vendedor o inmueble especificado no existe" 
+                  });
+              }
+              return res.status(500).json({ 
+                  message: "Error al guardar la publicación" 
+              });
           }
+
+          res.status(201).json({ 
+              message: "Publicación guardada exitosamente",
+              id: results.insertId,
+              fecha_publicacion: new Date()
+          });
+          
           connection.end();
       });
   } catch (e) {
-      console.error("Error al guardar la publicación:", e);
-      res.status(500).json({ message: "Error al guardar la publicación" });
+      console.error("Error al procesar la publicación:", e);
+      res.status(500).json({ 
+          message: "Error interno del servidor al procesar la publicación" 
+      });
   }
 },
-
 
 };
 /*module.exports = {

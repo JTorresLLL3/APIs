@@ -47,6 +47,30 @@ module.exports = {
         res.status(500).json({ message: "Error al obtener a los vendedores" });
     }
 },
+/*postVendedor: (req, res) => {
+  const { nombre_vendedor, apellidoP_vendedor, apellidoM_vendedor, email_vendedor, contraseña_vendedor } = req.body;
+
+  const query = `
+      INSERT INTO vendedores (nombre_vendedor, apellidoP_vendedor, apellidoM_vendedor, email_vendedor, contraseña_vendedor)
+      VALUES (?, ?, ?, ?, ?)
+  `;
+  
+  try {
+      const connection = mysql.createConnection(connectionObject);
+      connection.query(query, [nombre_vendedor, apellidoP_vendedor, apellidoM_vendedor, email_vendedor, contraseña_vendedor], (err, results) => {
+          if (!err) {
+              res.status(201).json({ message: 'Vendedor creado exitosamente', data: results });
+          } else {
+              res.status(500).json({ message: 'Error al crear el vendedor' });
+          }
+          connection.end();
+      });
+  } catch (e) {
+      console.log(e);
+      res.status(500).json({ message: 'Error al crear el vendedor' });
+  }
+
+},*/
 
 };
 /*module.exports = {
