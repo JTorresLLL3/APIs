@@ -71,6 +71,30 @@ postVendedor: (req, res) => {
   }
 
 },
+putVendedor: (req, res) => {
+  const { nombre_vendedor, apellidoP_vendedor, apellidoM_vendedor, email_vendedor, telefono_vendedor, img_vendedor_perfil } = req.body;
+
+  const query = `
+      UPDATE usuarios
+      SET nombre_vendedor = ?, apellidoP_vendedor = ?, apellidoM_vendedor = ?, telefono_vendedor = ?, img_vendedor_perfil = ?
+      WHERE email_vendedor = ?
+  `;
+  
+  try {
+      const connection = mysql.createConnection(connectionObject);
+      connection.query(query, [nombre_vendedor, apellidoP_vendedor, apellidoM_vendedor, telefono_vendedor, img_vendedor_perfil, email_vendedor], (err, results) => {
+          if (!err) {
+              res.status(200).json({ message: 'Vendedor actualizado exitosamente', data: results });
+          } else {
+              res.status(500).json({ message: 'Error al actualizar el vendedor' });
+          }
+          connection.end();
+      });
+  } catch (e) {
+      console.log(e);
+      res.status(500).json({ message: 'Error al actualizar el vendedor' });
+  }
+},
 
 };
 /*module.exports = {

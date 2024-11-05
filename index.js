@@ -23,11 +23,13 @@ app.get("/usuarios/:id", usuariosController.getUsuario);
 app.get("/usuarios", usuariosController.getUsuarios);
 app.get("/usuarios/:id/favoritos", usuariosController.getFavoritos); 
 app.post("/usuario", jsonParser, usuariosController.postUsuario);
+app.put("/usuario", jsonParser, usuariosController.putUsuario);
 
 //vendedores
 app.get("/vendedores/:id", vendedoresController.getVendedor);
 app.get("/vendedores", vendedoresController.getVendedores);
 app.post("/vendedor", jsonParser, vendedoresController.postVendedor);
+app.put("/vendedor", jsonParser, vendedoresController.putVendedor);
 
 //inmuebles
 app.get("/inmuebles/:id", inmueblesController.getInmueble);

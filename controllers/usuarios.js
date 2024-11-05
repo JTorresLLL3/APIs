@@ -96,7 +96,30 @@ postUsuario: (req, res) => {
   }
 
 },
+putUsuario: (req, res) => {
+  const { nombre_usuario, apellidoP, apellidoM, correo_usuario, telefono_usuario, img_usuario_perfil } = req.body;
 
+  const query = `
+      UPDATE usuarios
+      SET nombre_usuario = ?, apellidoP = ?, apellidoM = ?, telefono_usuario = ?, img_usuario_perfil = ?
+      WHERE correo_usuario = ?
+  `;
+  
+  try {
+      const connection = mysql.createConnection(connectionObject);
+      connection.query(query, [nombre_usuario, apellidoP, apellidoM, telefono_usuario, img_usuario_perfil, correo_usuario], (err, results) => {
+          if (!err) {
+              res.status(200).json({ message: 'Usuario actualizado exitosamente', data: results });
+          } else {
+              res.status(500).json({ message: 'Error al actualizar el usuario' });
+          }
+          connection.end();
+      });
+  } catch (e) {
+      console.log(e);
+      res.status(500).json({ message: 'Error al actualizar el usuario' });
+  }
+},
 };
 
 //POST USUARIO: nombre_usuario, apellidoP, apellidoM, correo_usuario, contraseña_usuario
