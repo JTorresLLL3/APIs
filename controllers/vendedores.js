@@ -47,7 +47,7 @@ module.exports = {
         res.status(500).json({ message: "Error al obtener a los vendedores" });
     }
 },
-/*postVendedor: (req, res) => {
+postVendedor: (req, res) => {
   const { nombre_vendedor, apellidoP_vendedor, apellidoM_vendedor, email_vendedor, contraseña_vendedor } = req.body;
 
   const query = `
@@ -70,7 +70,7 @@ module.exports = {
       res.status(500).json({ message: 'Error al crear el vendedor' });
   }
 
-},*/
+},
 
 };
 /*module.exports = {

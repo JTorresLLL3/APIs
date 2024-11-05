@@ -96,6 +96,7 @@ postUsuario: (req, res) => {
   }
 
 },
+
 };
 
 //POST USUARIO: nombre_usuario, apellidoP, apellidoM, correo_usuario, contraseña_usuario
