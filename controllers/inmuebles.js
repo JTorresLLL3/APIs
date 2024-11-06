@@ -8,8 +8,8 @@ const mysql = require("mysql2");
 const connectionObject = {
   host: "localhost",
   user: "root",
-  password: "AlbedoLLL3",
-  database: "urhomeCUU2",
+  password: "goldenstate777*",
+  database: "urhomeCUU_",
 };
 module.exports = {
   getInmuebles: (req, res) => {

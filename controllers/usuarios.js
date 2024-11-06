@@ -2,8 +2,8 @@ const mysql = require("mysql2");
 const connectionObject = {
   host: "localhost",
   user: "root",
-  password: "AlbedoLLL3",
-  database: "urhomeCUU2",
+  password: "goldenstate777*",
+  database: "urhomeCUU_",
 };
 module.exports = {
   getUsuarios: (req, res) => {
@@ -48,53 +48,38 @@ module.exports = {
     }
 },
 getFavoritos: (req, res) => {
-  const { id } = req.params; // Cambia a 'id' si estás usando /usuarios/:id/favoritos
-  const query = `
-    SELECT p.*
-    FROM favoritos f
-    JOIN publicaciones p ON f.fk_publicacion = p.id_publicacion
-    WHERE f.fk_usuario = ?
-  `;
-  
-  try {
-    const connection = mysql.createConnection(connectionObject);
-    connection.query(query, [id], (err, results, fields) => {
-      if (!err) {
-        console.log("Resultados de favoritos:", results); // Verifica si hay datos en results
-        res.json(results);
-      } else {
-        res.status(500).json({ message: "Error al obtener las publicaciones favoritas" });
-      }
-      connection.end();
-    });
-  } catch (e) {
-    console.log(e);
-    res.status(500).json({ message: "Error al obtener las publicaciones favoritas" });
-  }
-},
-postUsuario: (req, res) => {
-  const { nombre_usuario, apellidoP, apellidoM, correo_usuario, contraseña_usuario } = req.body;
+  const { id } = req.params;
 
   const query = `
-      INSERT INTO usuarios (nombre_usuario, apellidoP, apellidoM, correo_usuario, contraseña_usuario)
-      VALUES (?, ?, ?, ?, ?)
+      SELECT 
+    f.*,
+    pv.*,
+    pr.*
+FROM 
+    favoritos f
+LEFT JOIN 
+    venta_publicaciones pv ON f.fk_publicacion_venta = pv.id_publicacion_venta
+LEFT JOIN 
+    renta_publicaciones pr ON f.fk_publicacion_renta = pr.id_publicacion_renta
+WHERE 
+    f.fk_usuario = ?;
+
   `;
   
   try {
       const connection = mysql.createConnection(connectionObject);
-      connection.query(query, [nombre_usuario, apellidoP, apellidoM, correo_usuario, contraseña_usuario], (err, results) => {
+      connection.query(query, [id], (err, results) => {
           if (!err) {
-              res.status(201).json({ message: 'Usuario creado exitosamente', data: results });
+              res.json(results);
           } else {
-              res.status(500).json({ message: 'Error al crear el usuario' });
+              res.status(500).json({ message: "Error al obtener las publicaciones favoritas" });
           }
           connection.end();
       });
   } catch (e) {
       console.log(e);
-      res.status(500).json({ message: 'Error al crear el usuario' });
+      res.status(500).json({ message: "Error al obtener las publicaciones favoritas" });
   }
-
 },
 putUsuario: (req, res) => {
   const { nombre_usuario, apellidoP, apellidoM, correo_usuario, telefono_usuario, img_usuario_perfil } = req.body;

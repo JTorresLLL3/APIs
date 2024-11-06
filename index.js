@@ -16,25 +16,25 @@ app.get("/", (req, res) => {
 //publicaciones
 app.get("/publicaciones/:id", publicacionesController.getPublicacion);
 app.get("/publicaciones", publicacionesController.getPublicaciones);
-app.post("/publicacion", jsonParser, publicacionesController.postPublicacion);
+//app.post("/publicacion", jsonParser, publicacionesController.postPublicacion);
 
 //usuarios
 app.get("/usuarios/:id", usuariosController.getUsuario);
 app.get("/usuarios", usuariosController.getUsuarios);
 app.get("/usuarios/:id/favoritos", usuariosController.getFavoritos); 
-app.post("/usuario", jsonParser, usuariosController.postUsuario);
-app.put("/usuario", jsonParser, usuariosController.putUsuario);
+//app.post("/usuario", jsonParser, usuariosController.postUsuario);
+//app.put("/usuario", jsonParser, usuariosController.putUsuario);
 
 //vendedores
 app.get("/vendedores/:id", vendedoresController.getVendedor);
 app.get("/vendedores", vendedoresController.getVendedores);
-app.post("/vendedor", jsonParser, vendedoresController.postVendedor);
-app.put("/vendedor", jsonParser, vendedoresController.putVendedor);
+//app.post("/vendedor", jsonParser, vendedoresController.postVendedor);
+//app.put("/vendedor", jsonParser, vendedoresController.putVendedor);
 
 //inmuebles
 app.get("/inmuebles/:id", inmueblesController.getInmueble);
 app.get("/inmuebles", inmueblesController.getInmuebles);
-app.post("/inmueble", jsonParser, inmueblesController.postInmueble);
+//app.post("/inmueble", jsonParser, inmueblesController.postInmueble);
 
 //venta
 app.get("/venta/:id", ventaController.getVenta);
@@ -46,7 +46,7 @@ app.get("/renta", rentaController.getRentas);
 
 
 //Escuchar peticiones en el puerto 5500
-app.listen(5500, () => {
+app.listen(5550, () => {
   console.log("Servidor corriendo en el puerto 5500 para el area 51");
 });
 
