@@ -21,6 +21,7 @@ app.get("/publicaciones", publicacionesController.getPublicaciones);
 app.get("/usuarios/:id", usuariosController.getUsuario);
 app.get("/usuarios", usuariosController.getUsuarios);
 app.get("/usuarios/:id/favoritos", usuariosController.getFavoritos); 
+
 app.post("/usuario", jsonParser, usuariosController.postUsuario);
 app.post("/usuarios/:id/publicacion", jsonParser, usuariosController.postPublicacion);
 app.put("/usuario", jsonParser, usuariosController.putUsuario);
@@ -46,7 +47,7 @@ app.get("/renta_publicaciones", rentaController.getRentas);
 
 
 //Escuchar peticiones en el puerto 5500
-app.listen(5500, () => {
+app.listen(5550, () => {
   console.log("Servidor corriendo en el puerto 5500 para el area 51");
 });
 
