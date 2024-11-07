@@ -7,7 +7,10 @@ const inmueblesController = require("./controllers/inmuebles");
 const bodyParser = require("body-parser");
 const jsonParser = bodyParser.json();
 const express = require("express");
+const cors = require("cors");
 const app = express();
+app.use(cors());
+const port = 5500;
 
 app.get("/", (req, res) => {
   res.send("EN CONSTRUCCION");
@@ -47,8 +50,8 @@ app.get("/renta_publicaciones", rentaController.getRentas);
 
 
 //Escuchar peticiones en el puerto 5500
-app.listen(5550, () => {
-  console.log("Servidor corriendo en el puerto 5500 para el area 51");
+app.listen(port, () => {
+  console.log("Servidor corriendo en el" + port + "para el area 51");
 });
 
 // INSTALAR
@@ -86,5 +89,8 @@ Programa dbeaver, squirrel
 Se necesita la URL del localhost para indicar que la base de datos está en la computadora.
 Poner atencion a mayusculas y minusculas cuando se mande llamar una tabla desde la base de datos.
 !err = Si no hay error. El simbolo de admiración indica que debe pasar la acción contraria.
+
+npm install cors
+const cors = require("cors");
 
 */
