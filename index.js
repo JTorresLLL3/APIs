@@ -43,15 +43,17 @@ app.post("/inmueble/", jsonParser, inmueblesController.postInmueble);
 //venta
 app.get("/venta_publicaciones/:id", ventaController.getVenta);
 app.get("/venta_publicaciones", ventaController.getVentas);
+app.post("/venta_publicacion", jsonParser, ventaController.postVenta);
 
 //renta
 app.get("/renta_publicaciones/:id", rentaController.getRenta);
 app.get("/renta_publicaciones", rentaController.getRentas);
+app.post("/renta_publicaciones", jsonParser, rentaController.postRenta);
 
 
 //Escuchar peticiones en el puerto 5500
 app.listen(port, () => {
-  console.log("Servidor corriendo en el" + port + "para el area 51");
+  console.log("Servidor corriendo en el " + port + " para el area 51");
 });
 
 // INSTALAR
