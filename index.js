@@ -1,7 +1,7 @@
 const publicacionesController = require("./controllers/publicaciones");
 const usuariosController = require("./controllers/usuarios");
-const ventaController = require("./controllers/venta");
-const rentaController = require("./controllers/renta");
+const ventaController = require("./controllers/venta_publicaciones");
+const rentaController = require("./controllers/renta_publicaciones");
 const vendedoresController = require("./controllers/vendedores");
 const inmueblesController = require("./controllers/inmuebles");
 const bodyParser = require("body-parser");
@@ -16,13 +16,13 @@ app.get("/", (req, res) => {
 //publicaciones
 app.get("/publicaciones/:id", publicacionesController.getPublicacion);
 app.get("/publicaciones", publicacionesController.getPublicaciones);
-app.post("/publicacion", jsonParser, publicacionesController.postPublicacion);
 
 //usuarios
 app.get("/usuarios/:id", usuariosController.getUsuario);
 app.get("/usuarios", usuariosController.getUsuarios);
 app.get("/usuarios/:id/favoritos", usuariosController.getFavoritos); 
 app.post("/usuario", jsonParser, usuariosController.postUsuario);
+app.post("/usuarios/:id/publicacion", jsonParser, usuariosController.postPublicacion);
 app.put("/usuario", jsonParser, usuariosController.putUsuario);
 
 //vendedores
@@ -34,15 +34,15 @@ app.put("/vendedor", jsonParser, vendedoresController.putVendedor);
 //inmuebles
 app.get("/inmuebles/:id", inmueblesController.getInmueble);
 app.get("/inmuebles", inmueblesController.getInmuebles);
-app.post("/inmueble", jsonParser, inmueblesController.postInmueble);
+app.post("/inmueble/", jsonParser, inmueblesController.postInmueble);
 
 //venta
-app.get("/venta/:id", ventaController.getVenta);
-app.get("/venta", ventaController.getVentas);
+app.get("/venta_publicaciones/:id", ventaController.getVenta);
+app.get("/venta_publicaciones", ventaController.getVentas);
 
 //renta
-app.get("/renta/:id", rentaController.getRenta);
-app.get("/renta", rentaController.getRentas);
+app.get("/renta_publicaciones/:id", rentaController.getRenta);
+app.get("/renta_publicaciones", rentaController.getRentas);
 
 
 //Escuchar peticiones en el puerto 5500

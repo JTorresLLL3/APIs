@@ -3,33 +3,33 @@ const connectionObject = {
   host: "localhost",
   user: "root",
   password: "AlbedoLLL3",
-  database: "urhomeCUU2",
+  database: "urhomeCUU_",
 };
 module.exports = {
-  getRentas: (req, res) => {
-    let rentas = [];
+  getVentas: (req, res) => {
+    let ventas = [];
     try {
       const connection = mysql.createConnection(connectionObject);
-      connection.query("SELECT * FROM renta_publicaciones", (err, results, fields) => {
+      connection.query("SELECT * FROM venta_publicaciones", (err, results, fields) => {
         if (!err) {
-          rentas = results;
-          res.json(rentas);
+          ventas = results;
+          res.json(ventas);
         } else {
-          res.json({ message: "Error al obtener las rentas" });
+          res.json({ message: "Error al obtener las ventas" });
         }
         connection.end();
       });
     } catch (e) {
       console.log(e);
-      res.json({ message: "Error al obtener las rentas" });
+      res.json({ message: "Error al obtener las ventas" });
     }
   },
-    getRenta: (req, res) => {
+    getVenta: (req, res) => {
     const { id } = req.params;
-    let query = "SELECT * FROM renta_publicaciones";
+    let query = "SELECT * FROM venta_publicaciones";
     let queryParams = [];
     if (id) {
-        query += " WHERE id_publicacion_renta = ?";
+        query += " WHERE id_publicacion_venta = ?";
         queryParams.push(id);
     }
     try {
@@ -38,13 +38,13 @@ module.exports = {
             if (!err) {
                 res.json(results);
             } else {
-                res.status(500).json({ message: "Error al obtener las rentas" });
+                res.status(500).json({ message: "Error al obtener las ventas" });
             }
             connection.end();
         });
     } catch (e) {
         console.log(e);
-        res.status(500).json({ message: "Error al obtener las rentas" });
+        res.status(500).json({ message: "Error al obtener las ventas" });
     }
 },
 

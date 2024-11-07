@@ -9,7 +9,7 @@ const connectionObject = {
   host: "localhost",
   user: "root",
   password: "AlbedoLLL3",
-  database: "urhomeCUU2",
+  database: "urhomeCUU_",
 };
 module.exports = {
   getInmuebles: (req, res) => {
@@ -60,7 +60,6 @@ postInmueble: (req, res) => {
             calle_inmueble,
             colonia_inmueble,
             cp_inmueble,
-            fk_tipo,
             terreno_inmueble,
             habitaciones,
             baños_int,
@@ -75,7 +74,6 @@ postInmueble: (req, res) => {
             calle_inmueble,
             colonia_inmueble,
             cp_inmueble,
-            fk_tipo,
             terreno_inmueble,
             baños_int,
             garage,
@@ -152,7 +150,6 @@ postInmueble: (req, res) => {
                 calle_inmueble,
                 colonia_inmueble,
                 cp_inmueble,
-                fk_tipo,
                 terreno_inmueble,
                 habitaciones,
                 baños_int,
@@ -160,7 +157,7 @@ postInmueble: (req, res) => {
                 pisos,
                 amueblado,
                 fk_vendedor
-            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         `;
 
         const values = [
@@ -168,7 +165,6 @@ postInmueble: (req, res) => {
             calle_inmueble,
             colonia_inmueble,
             cp_inmueble,
-            fk_tipo,
             terreno_inmueble,
             habitaciones,
             baños_int,
@@ -183,7 +179,7 @@ postInmueble: (req, res) => {
                 console.error("Error al guardar el inmueble:", err);
                 if (err.code === 'ER_NO_REFERENCED_ROW_2') {
                     return res.status(400).json({
-                        message: "El tipo de inmueble o vendedor especificado no existe"
+                        message: "El vendedor especificado no existe"
                     });
                 }
                 return res.status(500).json({
