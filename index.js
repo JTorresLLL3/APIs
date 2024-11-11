@@ -1,4 +1,3 @@
-const publicacionesController = require("./controllers/publicaciones");
 const usuariosController = require("./controllers/usuarios");
 const ventaController = require("./controllers/venta_publicaciones");
 const rentaController = require("./controllers/renta_publicaciones");
@@ -16,36 +15,31 @@ app.get("/", (req, res) => {
   res.send("EN CONSTRUCCION");
 });
 
-//publicaciones
-app.get("/publicaciones/:id", publicacionesController.getPublicacion);
-app.get("/publicaciones", publicacionesController.getPublicaciones);
-
 //usuarios
 app.get("/usuarios/:id", usuariosController.getUsuario);
 app.get("/usuarios", usuariosController.getUsuarios);
 app.get("/usuarios/:id/favoritos", usuariosController.getFavoritos); 
-
 app.post("/usuario", jsonParser, usuariosController.postUsuario);
-app.post("/usuarios/:id/publicacion", jsonParser, usuariosController.postPublicacion);
-app.put("/usuario", jsonParser, usuariosController.putUsuario);
+app.put("/usuario/edit", jsonParser, usuariosController.putUsuario);
 
 //vendedores
 app.get("/vendedores/:id", vendedoresController.getVendedor);
 app.get("/vendedores", vendedoresController.getVendedores);
 app.post("/vendedor", jsonParser, vendedoresController.postVendedor);
-app.put("/vendedor", jsonParser, vendedoresController.putVendedor);
+app.put("/vendedor/edit", jsonParser, vendedoresController.putVendedor);
 
 //inmuebles
 app.get("/inmuebles/:id", inmueblesController.getInmueble);
 app.get("/inmuebles", inmueblesController.getInmuebles);
 app.post("/inmueble/", jsonParser, inmueblesController.postInmueble);
+app.put("/inmueble/:id", jsonParser, inmueblesController.putInmueble);
 
-//venta
+//venta_publicaciones
 app.get("/venta_publicaciones/:id", ventaController.getVenta);
 app.get("/venta_publicaciones", ventaController.getVentas);
 app.post("/venta_publicacion", jsonParser, ventaController.postVenta);
 
-//renta
+//renta_publicaciones
 app.get("/renta_publicaciones/:id", rentaController.getRenta);
 app.get("/renta_publicaciones", rentaController.getRentas);
 app.post("/renta_publicaciones", jsonParser, rentaController.postRenta);

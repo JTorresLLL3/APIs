@@ -106,7 +106,7 @@ postInmueble: (req, res) => {
             });
         }
 
-        if (cp_inmueble.length !== 5 || !/^\d+$/.test(cp_inmueble)) {
+        if (cp_inmueble.length !== 5 ) {
             return res.status(400).json({
                 message: "El código postal debe ser de 5 dígitos numéricos"
             });
@@ -202,6 +202,165 @@ postInmueble: (req, res) => {
         console.error("Error al procesar el inmueble:", e);
         res.status(500).json({
             message: "Error interno del servidor al procesar el inmueble"
+        });
+    }
+},
+putInmueble: (req, res) => {
+    try {
+        const { id } = req.params; // Se obtiene el ID del inmueble desde los parámetros de la URL
+        const {
+            precio_inmueble,
+            calle_inmueble,
+            colonia_inmueble,
+            cp_inmueble,
+            terreno_inmueble,
+            habitaciones,
+            baños_int,
+            garage,
+            pisos,
+            amueblado,
+            fk_vendedor
+        } = req.body;
+
+        const camposRequeridos = {
+            precio_inmueble,
+            calle_inmueble,
+            colonia_inmueble,
+            cp_inmueble,
+            terreno_inmueble,
+            baños_int,
+            garage,
+            pisos,
+            amueblado,
+            fk_vendedor
+        };
+
+        const camposFaltantes = Object.entries(camposRequeridos)
+            .filter(([_, value]) => value === undefined)
+            .map(([key]) => key);
+
+        if (camposFaltantes.length > 0) {
+            return res.status(400).json({
+                message: "Faltan campos requeridos",
+                campos_faltantes: camposFaltantes
+            });
+        }
+
+        // Validaciones específicas
+        if (precio_inmueble <= 0) {
+            return res.status(400).json({
+                message: "El precio del inmueble debe ser mayor a 0"
+            });
+        }
+
+        if (terreno_inmueble <= 0) {
+            return res.status(400).json({
+                message: "El terreno del inmueble debe ser mayor a 0"
+            });
+        }
+
+        if (cp_inmueble.length !== 5 ) {
+            return res.status(400).json({
+                message: "El código postal debe ser de 5 dígitos numéricos"
+            });
+        }
+
+        if (calle_inmueble.length > 50) {
+            return res.status(400).json({
+                message: "La calle no puede exceder los 50 caracteres"
+            });
+        }
+
+        if (colonia_inmueble.length > 30) {
+            return res.status(400).json({
+                message: "La colonia no puede exceder los 30 caracteres"
+            });
+        }
+
+        if (pisos <= 0) {
+            return res.status(400).json({
+                message: "El número de pisos debe ser mayor a 0"
+            });
+        }
+
+        if (baños_int <= 0) {
+            return res.status(400).json({
+                message: "El número de baños debe ser mayor a 0"
+            });
+        }
+
+        if (habitaciones !== undefined && habitaciones <= 0) {
+            return res.status(400).json({
+                message: "El número de habitaciones debe ser mayor a 0"
+            });
+        }
+
+        const connection = mysql.createConnection(connectionObject);
+
+        const query = `
+            UPDATE inmuebles SET
+                precio_inmueble = ?,
+                calle_inmueble = ?,
+                colonia_inmueble = ?,
+                cp_inmueble = ?,
+                terreno_inmueble = ?,
+                habitaciones = ?,
+                baños_int = ?,
+                garage = ?,
+                pisos = ?,
+                amueblado = ?,
+                fk_vendedor = ?
+            WHERE id_inmueble = ?
+        `;
+
+        const values = [
+            precio_inmueble,
+            calle_inmueble,
+            colonia_inmueble,
+            cp_inmueble,
+            terreno_inmueble,
+            habitaciones,
+            baños_int,
+            garage,
+            pisos,
+            amueblado,
+            fk_vendedor,
+            id
+        ];
+
+        connection.query(query, values, (err, results) => {
+            if (err) {
+                console.error("Error al actualizar el inmueble:", err);
+                if (err.code === 'ER_NO_REFERENCED_ROW_2') {
+                    return res.status(400).json({
+                        message: "El vendedor especificado no existe"
+                    });
+                }
+                return res.status(500).json({
+                    message: "Error al actualizar el inmueble"
+                });
+            }
+
+            if (results.affectedRows === 0) {
+                return res.status(404).json({
+                    message: "Inmueble no encontrado"
+                });
+            }
+
+            res.status(200).json({
+                message: "Inmueble actualizado exitosamente",
+                data: {
+                    id,
+                    ...req.body
+                }
+            });
+
+            connection.end();
+        });
+    } catch (e) {
+        console.error("Error al procesar la actualización del inmueble:", e);
+        res.status(500).json({
+            message: "Error interno del servidor al procesar la actualización del inmueble"
         });
     }
 },

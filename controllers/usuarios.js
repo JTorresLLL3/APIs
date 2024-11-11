@@ -160,125 +160,67 @@ postUsuario: (req, res) => {
   });
 },
 putUsuario: (req, res) => {
-  const { nombre_usuario, apellidoP, apellidoM, correo_usuario, telefono_usuario, img_usuario_perfil } = req.body;
+  const {
+    nombre_usuario,
+    apellidoP_usuario,
+    apellidoM_usuario,
+    email_usuario,
+    contraseña_usuario,
+    edad_usuario,
+    telefono_usuario,
+    check_usuario,
+    check_usuario2,
+  } = req.body;
 
   const query = `
-      UPDATE usuarios
-      SET nombre_usuario = ?, apellidoP = ?, apellidoM = ?, telefono_usuario = ?, img_usuario_perfil = ?
-      WHERE correo_usuario = ?
+    UPDATE usuarios
+    SET nombre_usuario = ?, 
+        apellidoP_usuario = ?, 
+        apellidoM_usuario = ?, 
+        contraseña_usuario = ?, 
+        edad_usuario = ?, 
+        telefono_usuario = ?, 
+        check_usuario = ?, 
+        check_usuario2 = ?
+    WHERE email_usuario = ?
   `;
-  
+
   try {
-      const connection = mysql.createConnection(connectionObject);
-      connection.query(query, [nombre_usuario, apellidoP, apellidoM, telefono_usuario, img_usuario_perfil, correo_usuario], (err, results) => {
-          if (!err) {
-              res.status(200).json({ message: 'Usuario actualizado exitosamente', data: results });
-          } else {
-              res.status(500).json({ message: 'Error al actualizar el usuario' });
-          }
-          connection.end();
-      });
+    const connection = mysql.createConnection(connectionObject);
+    connection.query(
+      query,
+      [
+        nombre_usuario,
+        apellidoP_usuario,
+        apellidoM_usuario,
+        contraseña_usuario,
+        edad_usuario,
+        telefono_usuario,
+        check_usuario,
+        check_usuario2,
+        email_usuario,
+      ],
+      (err, results) => {
+        if (!err) {
+          res.status(200).json({
+            message: "Usuario actualizado exitosamente",
+            data: results,
+          });
+        } else {
+          res.status(500).json({
+            message: "Error al actualizar el usuario",
+            error: err,
+          });
+        }
+        connection.end();
+      }
+    );
   } catch (e) {
-      console.log(e);
-      res.status(500).json({ message: 'Error al actualizar el usuario' });
+    console.log(e);
+    res.status(500).json({ message: "Error al actualizar el usuario" });
   }
 },
-postPublicacion: (req, res) => {
-  try {
-      const {
-          titulo_publicacion,
-          descripcion_publicacion,
-          estado_publicacion,
-          tipo_inmueble,
-          fk_vendedor,
-          fk_inmueble
-      } = req.body;
 
-      if (!titulo_publicacion || !descripcion_publicacion || estado_publicacion === undefined || 
-          !tipo_inmueble || !fk_vendedor || !fk_inmueble) {
-          return res.status(400).json({ 
-              message: "Todos los campos son requeridos",
-              required_fields: [
-                  "titulo_publicacion",
-                  "descripcion_publicacion",
-                  "estado_publicacion",
-                  "tipo_inmueble",
-                  "fk_vendedor",
-                  "fk_inmueble"
-              ]
-          });
-      }
-
-      if (titulo_publicacion.length > 100) {
-          return res.status(400).json({ 
-              message: "El título no puede exceder los 100 caracteres" 
-          });
-      }
-
-      if (descripcion_publicacion.length > 250) {
-          return res.status(400).json({ 
-              message: "La descripción no puede exceder los 250 caracteres" 
-          });
-      }
-
-      const validTypes = ['Casa', 'Departamento', 'Local', 'Terreno'];
-      if (!validTypes.includes(tipo_inmueble)) {
-          return res.status(400).json({ 
-              message: "El tipo de inmueble es inválido. Debe ser uno de los siguientes: Casa, Departamento, Local, Terreno" 
-          });
-      }
-
-      const connection = mysql.createConnection(connectionObject);
-
-      const query = `
-          INSERT INTO renta_publicaciones (
-              titulo_publicacion,
-              descripcion_publicacion,
-              fecha_publicacion,
-              estado_publicacion,
-              tipo_inmueble,
-              fk_vendedor,
-              fk_inmueble
-          ) VALUES (?, ?, NOW(), ?, ?, ?, ?)
-      `;
-
-      const values = [
-          titulo_publicacion,
-          descripcion_publicacion,
-          estado_publicacion,
-          tipo_inmueble,
-          fk_vendedor,
-          fk_inmueble
-      ];
-
-      connection.query(query, values, (err, results) => {
-          if (err) {
-              console.error("Error al guardar la publicación:", err);
-              if (err.code === 'ER_NO_REFERENCED_ROW_2') {
-                  return res.status(400).json({ 
-                      message: "El vendedor o inmueble especificado no existe" 
-                  });
-              }
-              return res.status(500).json({ 
-                  message: "Error al guardar la publicación" 
-              });
-          }
-
-          res.status(201).json({ 
-              message: "Publicación guardada exitosamente",
-              id: results.insertId,
-              fecha_publicacion: new Date()
-          });
-          
-          connection.end();
-      });
-  } catch (e) {
-      console.error("Error al procesar la publicación:", e);
-      res.status(500).json({ 
-          message: "Error interno del servidor al procesar la publicación" 
-      });
-  }
-},
 };
 
 //POST USUARIO: nombre_usuario, apellidoP, apellidoM, correo_usuario, contraseña_usuario

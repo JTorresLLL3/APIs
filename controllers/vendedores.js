@@ -48,53 +48,150 @@ module.exports = {
     }
 },
 postVendedor: (req, res) => {
-  const { nombre_vendedor, apellidoP_vendedor, apellidoM_vendedor, email_vendedor, contraseña_vendedor } = req.body;
+  const {
+    nombre_vendedor,
+    apellidoP_vendedor,
+    apellidoM_vendedor,
+    contraseña_vendedor,
+    edad_vendedor,
+    telefono_vendedor,
+    email_vendedor,
+    check_vendedor,
+    check_vendedor2,
+    fk_suscripcion
+  } = req.body;
 
-  const query = `
-      INSERT INTO vendedores (nombre_vendedor, apellidoP_vendedor, apellidoM_vendedor, email_vendedor, contraseña_vendedor)
-      VALUES (?, ?, ?, ?, ?)
-  `;
-  
-  try {
-      const connection = mysql.createConnection(connectionObject);
-      connection.query(query, [nombre_vendedor, apellidoP_vendedor, apellidoM_vendedor, email_vendedor, contraseña_vendedor], (err, results) => {
-          if (!err) {
-              res.status(201).json({ message: 'Vendedor creado exitosamente', data: results });
-          } else {
-              res.status(500).json({ message: 'Error al crear el vendedor' });
-          }
-          connection.end();
-      });
-  } catch (e) {
-      console.log(e);
-      res.status(500).json({ message: 'Error al crear el vendedor' });
+  const camposRequeridos = {
+    nombre_vendedor,
+    apellidoP_vendedor,
+    apellidoM_vendedor,
+    contraseña_vendedor,
+    edad_vendedor,
+    telefono_vendedor,
+    email_vendedor,
+    check_vendedor,
+    check_vendedor2,
+    fk_suscripcion
+  };
+
+  const camposFaltantes = Object.entries(camposRequeridos)
+    .filter(([_, value]) => value === undefined)
+    .map(([key]) => key);
+
+  if (camposFaltantes.length > 0) {
+    return res.status(400).json({
+      message: "Faltan campos requeridos",
+      campos_faltantes: camposFaltantes
+    });
   }
 
+  const query = `
+    INSERT INTO vendedores (
+    nombre_vendedor,
+    apellidoP_vendedor,
+    apellidoM_vendedor,
+    contraseña_vendedor,
+    edad_vendedor,
+    telefono_vendedor,
+    email_vendedor,
+    check_vendedor,
+    check_vendedor2,
+    fk_suscripcion
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+  `;
+
+  const values = [
+    nombre_vendedor,
+    apellidoP_vendedor,
+    apellidoM_vendedor,
+    contraseña_vendedor,
+    edad_vendedor,
+    telefono_vendedor,
+    email_vendedor,
+    check_vendedor,
+    check_vendedor2,
+    fk_suscripcion
+  ];
+
+  const connection = mysql.createConnection(connectionObject);
+
+  connection.query(query, values, (err, results) => {
+    if (err) {
+      console.error("Error al crear el vendedor:", err);
+      return res.status(500).json({ message: "Error al crear el vendedor", error: err });
+    }
+
+    res.status(201).json({
+      message: "Vendedor creado exitosamente",
+      id_vendedor: results.insertId,
+      data: { ...req.body }
+    });
+
+    connection.end();
+  });
 },
 putVendedor: (req, res) => {
-  const { nombre_vendedor, apellidoP_vendedor, apellidoM_vendedor, email_vendedor, telefono_vendedor, img_vendedor_perfil } = req.body;
+  const {
+    nombre_vendedor,
+    apellidoP_vendedor,
+    apellidoM_vendedor,
+    email_vendedor,
+    contraseña_vendedor,
+    edad_vendedor,
+    telefono_vendedor,
+    check_vendedor,
+    check_vendedor2,
+  } = req.body;
 
   const query = `
-      UPDATE usuarios
-      SET nombre_vendedor = ?, apellidoP_vendedor = ?, apellidoM_vendedor = ?, telefono_vendedor = ?, img_vendedor_perfil = ?
-      WHERE email_vendedor = ?
+    UPDATE vendedores
+    SET nombre_vendedor = ?, 
+        apellidoP_vendedor = ?, 
+        apellidoM_vendedor = ?, 
+        contraseña_vendedor = ?, 
+        edad_vendedor = ?, 
+        telefono_vendedor = ?, 
+        check_vendedor = ?, 
+        check_vendedor2 = ?
+    WHERE email_vendedor = ?
   `;
-  
+
   try {
-      const connection = mysql.createConnection(connectionObject);
-      connection.query(query, [nombre_vendedor, apellidoP_vendedor, apellidoM_vendedor, telefono_vendedor, img_vendedor_perfil, email_vendedor], (err, results) => {
-          if (!err) {
-              res.status(200).json({ message: 'Vendedor actualizado exitosamente', data: results });
-          } else {
-              res.status(500).json({ message: 'Error al actualizar el vendedor' });
-          }
-          connection.end();
-      });
+    const connection = mysql.createConnection(connectionObject);
+    connection.query(
+      query,
+      [
+        nombre_vendedor,
+        apellidoP_vendedor,
+        apellidoM_vendedor,
+        contraseña_vendedor,
+        edad_vendedor,
+        telefono_vendedor,
+        check_vendedor,
+        check_vendedor2,
+        email_vendedor,
+      ],
+      (err, results) => {
+        if (!err) {
+          res.status(200).json({
+            message: "Vendedor actualizado exitosamente",
+            data: results,
+          });
+        } else {
+          res.status(500).json({
+            message: "Error al actualizar el vendedor",
+            error: err,
+          });
+        }
+        connection.end();
+      }
+    );
   } catch (e) {
-      console.log(e);
-      res.status(500).json({ message: 'Error al actualizar el vendedor' });
+    console.log(e);
+    res.status(500).json({ message: "Error al actualizar el vendedor" });
   }
 },
+
 
 };
 /*module.exports = {
