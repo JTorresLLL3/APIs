@@ -2,8 +2,8 @@ const mysql = require("mysql2");
 const connectionObject = {
   host: "localhost",
   user: "root",
-  password: "AlbedoLLL3",
-  database: "urhomeCUU_",
+  password: "goldenstate777*",
+  database: "urhomeCUU_1",
 };
 module.exports = {
   // getVentas: (req, res) => {
@@ -77,29 +77,94 @@ module.exports = {
       res.status(500).json({ message: "Error al obtener las ventas" });
     }
   },
-    getVenta: (req, res) => {
-    const { id } = req.params;
-    let query = "SELECT * FROM venta_publicaciones";
-    let queryParams = [];
-    if (id) {
-        query += " WHERE id_publicacion_venta = ?";
-        queryParams.push(id);
-    }
-    try {
-        const connection = mysql.createConnection(connectionObject);
-        connection.query(query, queryParams, (err, results, fields) => {
-            if (!err) {
-                res.json(results);
-            } else {
-                res.status(500).json({ message: "Error al obtener las ventas" });
-            }
-            connection.end();
-        });
-    } catch (e) {
-        console.log(e);
-        res.status(500).json({ message: "Error al obtener las ventas" });
-    }
+//     getVenta: (req, res) => {
+//     const { id } = req.params;
+//     let query = "SELECT * FROM venta_publicaciones";
+//     let queryParams = [];
+//     if (id) {
+//         query += " WHERE id_publicacion_venta = ?";
+//         queryParams.push(id);
+//     }
+//     try {
+//         const connection = mysql.createConnection(connectionObject);
+//         connection.query(query, queryParams, (err, results, fields) => {
+//             if (!err) {
+//                 res.json(results);
+//             } else {
+//                 res.status(500).json({ message: "Error al obtener las ventas" });
+//             }
+//             connection.end();
+//         });
+//     } catch (e) {
+//         console.log(e);
+//         res.status(500).json({ message: "Error al obtener las ventas" });
+//     }
+// },
+getVenta: (req, res) => {
+  const { id } = req.params;
+  let query = `
+      SELECT 
+          vp.id_publicacion_venta, 
+          vp.titulo_publicacion, 
+          vp.precio_inmueble, 
+          vp.calle_inmueble, 
+          vp.colonia_inmueble, 
+          vp.cp_inmueble, 
+          vp.terreno_inmueble, 
+          vp.habitaciones, 
+          vp.baños_int, 
+          vp.pisos, 
+          vp.garage, 
+          vp.amueblado, 
+          vp.descripcion_publicacion, 
+          vp.fecha_publicacion, 
+          vp.estado_publicacion, 
+          vp.tipo_inmueble, 
+          vp.fk_vendedor, 
+          vp.fk_inmueble,
+          GROUP_CONCAT(ip.img_ruta) AS imagenes
+      FROM venta_publicaciones vp
+      LEFT JOIN imagenes_publicacion ip ON vp.id_publicacion_venta = ip.fk_publicacion_venta`;
+  let queryParams = [];
+  
+  // Si se proporciona un ID, filtrar la consulta
+  if (id) {
+      query += " WHERE vp.id_publicacion_venta = ?";
+      queryParams.push(id);
+  }
+
+  // Agrupar por la publicación para manejar las imágenes relacionadas
+  query += " GROUP BY vp.id_publicacion_venta";
+
+  try {
+      const connection = mysql.createConnection(connectionObject);
+      connection.query(query, queryParams, (err, results, fields) => {
+          if (!err) {
+              if (results.length > 0) {
+                  // Transformar las imágenes de BLOB a base64 y separarlas en un array
+                  const formattedResults = results.map(result => ({
+                      ...result,
+                      imagenes: result.imagenes 
+                          ? result.imagenes.split(',').map(img => Buffer.from(img, 'binary').toString('base64')) 
+                          : []
+                  }));
+                  res.json(formattedResults);
+              } else {
+                  res.status(404).json({ message: "No se encontró la publicación de venta con el ID proporcionado" });
+              }
+          } else {
+              console.error("Error al ejecutar la consulta:", err);
+              res.status(500).json({ message: "Error al obtener las ventas" });
+          }
+          connection.end();
+      });
+  } catch (e) {
+      console.error("Error al procesar la solicitud:", e);
+      res.status(500).json({ message: "Error al obtener las ventas" });
+  }
 },
+
+
 postVenta: (req, res) => {
   const {
     titulo_publicacion,
