@@ -6,22 +6,75 @@ const connectionObject = {
   database: "urhomeCUU_",
 };
 module.exports = {
+  // getVentas: (req, res) => {
+  //   let ventas = [];
+  //   try {
+  //     const connection = mysql.createConnection(connectionObject);
+  //     connection.query("SELECT * FROM venta_publicaciones", (err, results, fields) => {
+  //       if (!err) {
+  //         ventas = results;
+  //         res.json(ventas);
+  //       } else {
+  //         res.json({ message: "Error al obtener las ventas" });
+  //       }
+  //       connection.end();
+  //     });
+  //   } catch (e) {
+  //     console.log(e);
+  //     res.json({ message: "Error al obtener las ventas" });
+  //   }
+  // },
   getVentas: (req, res) => {
-    let ventas = [];
     try {
       const connection = mysql.createConnection(connectionObject);
-      connection.query("SELECT * FROM venta_publicaciones", (err, results, fields) => {
-        if (!err) {
-          ventas = results;
-          res.json(ventas);
+      const query = `
+        SELECT 
+          vp.id_publicacion_venta,
+          vp.titulo_publicacion,
+          vp.precio_inmueble,
+          vp.calle_inmueble,
+          vp.colonia_inmueble,
+          vp.cp_inmueble,
+          vp.terreno_inmueble,
+          vp.habitaciones,
+          vp.baños_int,
+          vp.pisos,
+          vp.garage,
+          vp.amueblado,
+          vp.descripcion_publicacion,
+          vp.fecha_publicacion,
+          vp.estado_publicacion,
+          vp.tipo_inmueble,
+          vp.fk_vendedor,
+          vp.fk_inmueble,
+          GROUP_CONCAT(ip.img_ruta) AS imagenes
+        FROM 
+          venta_publicaciones vp
+        LEFT JOIN 
+          imagenes_publicacion ip
+        ON 
+          vp.id_publicacion_venta = ip.fk_publicacion_venta
+        GROUP BY 
+          vp.id_publicacion_venta
+      `;
+
+      connection.query(query, (err, results, fields) => {
+        if (err) {
+          console.error("Error al ejecutar la consulta:", err);
+          res.status(500).json({ message: "Error al obtener las ventas" });
         } else {
-          res.json({ message: "Error al obtener las ventas" });
+          // Formatear las imágenes para cada publicación
+          const ventas = results.map((venta) => ({
+            ...venta,
+            imagenes: venta.imagenes ? venta.imagenes.split(",") : [],
+          }));
+          res.json(ventas);
         }
         connection.end();
       });
     } catch (e) {
-      console.log(e);
-      res.json({ message: "Error al obtener las ventas" });
+      console.error("Error en el controlador:", e);
+      res.status(500).json({ message: "Error al obtener las ventas" });
     }
   },
     getVenta: (req, res) => {
