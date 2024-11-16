@@ -3,7 +3,7 @@ const connectionObject = {
   host: "localhost",
   user: "root",
   password: "AlbedoLLL3",
-  database: "urhomeCUU_1",
+  database: "urhomeCUU_",
 };
 module.exports = {
   // getVentas: (req, res) => {
