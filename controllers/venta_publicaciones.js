@@ -2,7 +2,7 @@ const mysql = require("mysql2");
 const connectionObject = {
   host: "localhost",
   user: "root",
-  password: "AlbedoLLL3",
+  password: "",
   database: "urhomeCUU_",
 };
 module.exports = {
@@ -46,7 +46,6 @@ module.exports = {
           vp.estado_publicacion,
           vp.tipo_inmueble,
           vp.fk_vendedor,
-          vp.fk_inmueble,
           GROUP_CONCAT(ip.img_ruta) AS imagenes
         FROM 
           venta_publicaciones vp
@@ -121,7 +120,6 @@ getVenta: (req, res) => {
           vp.estado_publicacion, 
           vp.tipo_inmueble, 
           vp.fk_vendedor, 
-          vp.fk_inmueble,
           GROUP_CONCAT(ip.img_ruta) AS imagenes
       FROM venta_publicaciones vp
       LEFT JOIN imagenes_publicacion ip ON vp.id_publicacion_venta = ip.fk_publicacion_venta`;
