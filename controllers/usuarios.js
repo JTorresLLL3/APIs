@@ -2,7 +2,7 @@ const mysql = require("mysql2");
 const connectionObject = {
   host: "localhost",
   user: "root",
-  password: "",
+  password: "mysql123",
   database: "urhomeCUU_",
 };
 module.exports = {
@@ -88,9 +88,7 @@ postUsuario: (req, res) => {
     email_usuario,
     contraseña_usuario,
     edad_usuario,
-    telefono_usuario,
-    check_usuario,
-    check_usuario2
+    telefono_usuario
   } = req.body;
 
   const camposRequeridos = {
@@ -100,9 +98,7 @@ postUsuario: (req, res) => {
     email_usuario,
     contraseña_usuario,
     edad_usuario,
-    telefono_usuario,
-    check_usuario,
-    check_usuario2
+    telefono_usuario
   };
 
   const camposFaltantes = Object.entries(camposRequeridos)
@@ -124,10 +120,8 @@ postUsuario: (req, res) => {
       email_usuario,
       contraseña_usuario,
       edad_usuario,
-      telefono_usuario,
-      check_usuario,
-      check_usuario2
-    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+      telefono_usuario
+    ) VALUES (?, ?, ?, ?, ?, ?, ?)
   `;
 
   const values = [
@@ -137,9 +131,7 @@ postUsuario: (req, res) => {
     email_usuario,
     contraseña_usuario,
     edad_usuario,
-    telefono_usuario,
-    check_usuario,
-    check_usuario2
+    telefono_usuario
   ];
 
   const connection = mysql.createConnection(connectionObject);
