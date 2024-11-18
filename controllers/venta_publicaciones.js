@@ -2,7 +2,7 @@ const mysql = require("mysql2");
 const connectionObject = {
   host: "localhost",
   user: "root",
-  password: "mysql123",
+  password: "goldenstate777*",
   database: "urhomeCUU_",
 };
 module.exports = {
@@ -44,7 +44,6 @@ module.exports = {
           vp.descripcion_publicacion,
           vp.fecha_publicacion,
           vp.estado_publicacion,
-          vp.tipo_inmueble,
           vp.fk_vendedor,
           GROUP_CONCAT(ip.img_ruta) AS imagenes
         FROM 
@@ -117,8 +116,7 @@ getVenta: (req, res) => {
           vp.amueblado, 
           vp.descripcion_publicacion, 
           vp.fecha_publicacion, 
-          vp.estado_publicacion, 
-          vp.tipo_inmueble, 
+          vp.estado_publicacion,
           vp.fk_vendedor, 
           GROUP_CONCAT(ip.img_ruta) AS imagenes
       FROM venta_publicaciones vp
@@ -170,7 +168,6 @@ postVenta: (req, res) => {
     estado_publicacion,
     tipo_inmueble,
     fk_vendedor,
-    fk_inmueble
   } = req.body;
 
   if (!titulo_publicacion || !descripcion_publicacion || estado_publicacion === undefined || !fk_vendedor || !fk_inmueble) {
@@ -180,8 +177,7 @@ postVenta: (req, res) => {
         "titulo_publicacion",
         "descripcion_publicacion",
         "estado_publicacion",
-        "fk_vendedor",
-        "fk_inmueble"
+        "fk_vendedor"
       ]
     });
   }
@@ -207,8 +203,7 @@ postVenta: (req, res) => {
       estado_publicacion,
       tipo_inmueble,
       fk_vendedor,
-      fk_inmueble
-    ) VALUES (?, ?, ?, ?, ?, ?)
+    ) VALUES (?, ?, ?, ?, ?)
   `;
 
   const values = [
@@ -216,8 +211,7 @@ postVenta: (req, res) => {
     descripcion_publicacion,
     estado_publicacion,
     tipo_inmueble,
-    fk_vendedor,
-    fk_inmueble
+    fk_vendedor
   ];
 
   connection.query(query, values, (err, results) => {
