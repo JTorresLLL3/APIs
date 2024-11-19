@@ -1,9 +1,9 @@
-const publicacionesController = require("./controllers/publicaciones");
+// const publicacionesController = require("./controllers/publicaciones");
 const usuariosController = require("./controllers/usuarios");
 const ventaController = require("./controllers/venta_publicaciones");
 const rentaController = require("./controllers/renta_publicaciones");
 const vendedoresController = require("./controllers/vendedores");
-const inmueblesController = require("./controllers/inmuebles");
+// const inmueblesController = require("./controllers/inmuebles");
 const bodyParser = require("body-parser");
 const jsonParser = bodyParser.json();
 const express = require("express");
@@ -17,8 +17,8 @@ app.get("/", (req, res) => {
 });
 
 //publicaciones
-app.get("/publicaciones/:id", publicacionesController.getPublicacion);
-app.get("/publicaciones", publicacionesController.getPublicaciones);
+// app.get("/publicaciones/:id", publicacionesController.getPublicacion);
+// app.get("/publicaciones", publicacionesController.getPublicaciones);
 
 //usuarios
 app.get("/usuarios/:id", usuariosController.getUsuario);
@@ -36,9 +36,9 @@ app.post("/vendedor", jsonParser, vendedoresController.postVendedor);
 app.put("/vendedor", jsonParser, vendedoresController.putVendedor);
 
 //inmuebles
-app.get("/inmuebles/:id", inmueblesController.getInmueble);
-app.get("/inmuebles", inmueblesController.getInmuebles);
-app.post("/inmueble/", jsonParser, inmueblesController.postInmueble);
+// app.get("/inmuebles/:id", inmueblesController.getInmueble);
+// app.get("/inmuebles", inmueblesController.getInmuebles);
+// app.post("/inmueble/", jsonParser, inmueblesController.postInmueble);
 
 //venta
 app.get("/venta_publicaciones/:id", ventaController.getVenta);
