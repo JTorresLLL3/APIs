@@ -27,12 +27,6 @@ app.get("/vendedores", vendedoresController.getVendedores);
 app.post("/vendedor", jsonParser, vendedoresController.postVendedor);
 app.put("/vendedor/edit", jsonParser, vendedoresController.putVendedor);
 
-/*inmuebles
-app.get("/inmuebles/:id", inmueblesController.getInmueble);
-app.get("/inmuebles", inmueblesController.getInmuebles);
-app.post("/inmueble/", jsonParser, inmueblesController.postInmueble);
-app.put("/inmueble/:id", jsonParser, inmueblesController.putInmueble);
-*/
 
 //venta_publicaciones
 app.get("/venta_publicaciones/:id", ventaController.getVenta);
