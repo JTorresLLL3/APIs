@@ -2,7 +2,7 @@ const mysql = require("mysql2");
 const connectionObject = {
   host: "localhost",
   user: "root",
-  password: "goldenstate777*",
+  password: "",
   database: "urhomeCUU_",
 };
 module.exports = {
@@ -52,17 +52,11 @@ getFavoritos: (req, res) => {
 
   const query = `
 SELECT 
-    f.*,
-    pv.*,
-    pr.*
-FROM 
-    favoritos f
-LEFT JOIN 
-    venta_publicaciones pv ON f.fk_publicacion_venta = pv.id_publicacion_venta
-LEFT JOIN 
-    renta_publicaciones pr ON f.fk_publicacion_renta = pr.id_publicacion_renta
-WHERE 
-    f.fk_usuario = ?;
+    f.*, pv.*, pr.*
+FROM favoritos f
+LEFT JOIN venta_publicaciones pv ON f.fk_publicacion_venta = pv.id_publicacion_venta
+LEFT JOIN renta_publicaciones pr ON f.fk_publicacion_renta = pr.id_publicacion_renta
+WHERE f.fk_usuario = ?;
   `;
   
   try {
