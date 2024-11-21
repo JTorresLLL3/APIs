@@ -20,7 +20,7 @@ app.get("/usuarios", usuariosController.getUsuarios);
 app.get("/usuarios/:id/favoritos", usuariosController.getFavoritos); 
 app.post("/usuario", jsonParser, usuariosController.postUsuario);
 app.put("/usuario/edit", jsonParser, usuariosController.putUsuario);
-app.post("/usuarios/:id/publicacion_venta", jsonParser, usuariosController.postPublicacion);
+// app.post("/usuarios/:id/publicacion_venta", jsonParser, usuariosController.postPublicacion);
 
 //vendedores
 app.get("/vendedores/:id", vendedoresController.getVendedor);

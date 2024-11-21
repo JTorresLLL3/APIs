@@ -2,7 +2,7 @@ const mysql = require("mysql2");
 const connectionObject = {
   host: "localhost",
   user: "root",
-  password: "",
+  password: "goldenstate777*",
   database: "urhomeCUU_",
 };
 module.exports = {
@@ -82,6 +82,114 @@ getVenta: (req, res) => {
       console.error("Error al procesar la solicitud:", e);
       res.status(500).json({ message: "Error al obtener las ventas" });
   }
+},
+postVenta: (req, res) => {
+  const {
+    titulo_publicacion,
+    precio_inmueble,
+    calle_inmueble,
+    colonia_inmueble,
+    cp_inmueble,
+    terreno_inmueble,
+    habitaciones,
+    baños_int,
+    pisos,
+    garage,
+    amueblado,
+    descripcion_publicacion,
+    tipo_inmueble,
+    fk_vendedor,
+  } = req.body;
+
+  // Validación de campos requeridos
+  if (
+    !titulo_publicacion ||
+    !descripcion_publicacion
+  ) {
+    return res.status(400).json({
+      message: "Los campos requeridos deben estar presentes",
+      required_fields: [
+        "titulo_publicacion",
+        "descripcion_publicacion",
+      ],
+    });
+  }
+
+  // Validaciones específicas
+  if (titulo_publicacion.length > 100) {
+    return res.status(400).json({
+      message: "El título de la publicación no puede exceder los 100 caracteres",
+    });
+  }
+
+  if (descripcion_publicacion.length > 250) {
+    return res.status(400).json({
+      message: "La descripción de la publicación no puede exceder los 250 caracteres",
+    });
+  }
+
+  const connection = mysql.createConnection(connectionObject);
+
+  const query = `
+    INSERT INTO venta_publicaciones (
+      titulo_publicacion,
+      precio_inmueble,
+      calle_inmueble,
+      colonia_inmueble,
+      cp_inmueble,
+      terreno_inmueble,
+      habitaciones,
+      baños_int,
+      pisos,
+      garage,
+      amueblado,
+      descripcion_publicacion,
+      tipo_inmueble,
+      fk_vendedor
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+  `;
+
+  const values = [
+    titulo_publicacion,
+    precio_inmueble || null,
+    calle_inmueble || null,
+    colonia_inmueble || null,
+    cp_inmueble || null,
+    terreno_inmueble || null,
+    habitaciones || null,
+    baños_int || null,
+    pisos,
+    garage,
+    amueblado,
+    descripcion_publicacion,
+    tipo_inmueble,
+    fk_vendedor,
+  ];
+
+  connection.query(query, values, (err, results) => {
+    if (err) {
+      console.error("Error al crear la publicación de venta:", err);
+      if (err.code === "ER_NO_REFERENCED_ROW_2") {
+        return res.status(400).json({
+          message: "El vendedor especificado no existe",
+        });
+      }
+      return res.status(500).json({
+        message: "Error al crear la publicación de venta",
+      });
+    }
+
+    res.status(201).json({
+      message: "Publicación de venta creada exitosamente",
+      id: results.insertId,
+      data: {
+        ...req.body,
+        id_publicacion_venta: results.insertId,
+      },
+    });
+
+    connection.end();
+  });
 },
 
 };
