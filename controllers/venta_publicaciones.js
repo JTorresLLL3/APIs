@@ -2,7 +2,7 @@ const mysql = require("mysql2");
 const connectionObject = {
   host: "localhost",
   user: "root",
-  password: "AlbedoLLL3",
+  password: " ",
   database: "urhomeCUU_",
 };
 module.exports = {
@@ -11,31 +11,11 @@ module.exports = {
       const connection = mysql.createConnection(connectionObject);
       const query = `
         SELECT 
-          vp.id_publicacion_venta,
-          vp.titulo_publicacion,
-          vp.precio_inmueble,
-          vp.calle_inmueble,
-          vp.colonia_inmueble,
-          vp.cp_inmueble,
-          vp.terreno_inmueble,
-          vp.habitaciones,
-          vp.baños_int,
-          vp.pisos,
-          vp.garage,
-          vp.amueblado,
-          vp.descripcion_publicacion,
-          vp.fecha_publicacion,
-          vp.estado_publicacion,
-          vp.fk_vendedor,
-          GROUP_CONCAT(ip.img_ruta) AS imagenes
-        FROM 
-          venta_publicaciones vp
-        LEFT JOIN 
-          imagenes_publicacion ip
-        ON 
-          vp.id_publicacion_venta = ip.fk_publicacion_venta
-        GROUP BY 
-          vp.id_publicacion_venta
+          vp.* , GROUP_CONCAT(ip.img_ruta) AS imagenes
+        FROM venta_publicaciones vp
+        LEFT JOIN imagenes_publicacion ip
+        ON vp.id_publicacion_venta = ip.fk_publicacion_venta
+        GROUP BY vp.id_publicacion_venta
       `;
 
       connection.query(query, (err, results, fields) => {
@@ -62,23 +42,7 @@ getVenta: (req, res) => {
   const { id } = req.params;
   let query = `
       SELECT 
-          vp.id_publicacion_venta, 
-          vp.titulo_publicacion, 
-          vp.precio_inmueble, 
-          vp.calle_inmueble, 
-          vp.colonia_inmueble, 
-          vp.cp_inmueble, 
-          vp.terreno_inmueble, 
-          vp.habitaciones, 
-          vp.baños_int, 
-          vp.pisos, 
-          vp.garage, 
-          vp.amueblado, 
-          vp.descripcion_publicacion, 
-          vp.fecha_publicacion, 
-          vp.estado_publicacion,
-          vp.fk_vendedor, 
-          GROUP_CONCAT(ip.img_ruta) AS imagenes
+          vp.* , GROUP_CONCAT(ip.img_ruta) AS imagenes
       FROM venta_publicaciones vp
       LEFT JOIN imagenes_publicacion ip ON vp.id_publicacion_venta = ip.fk_publicacion_venta`;
   let queryParams = [];
