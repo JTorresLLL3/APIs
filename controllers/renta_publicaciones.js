@@ -54,7 +54,6 @@ postRenta: (req, res) => {
     estado_publicacion,
     tipo_inmueble,
     fk_vendedor,
-    fk_inmueble
   } = req.body;
 
   if (!titulo_publicacion || !descripcion_publicacion || estado_publicacion === undefined || !fk_vendedor || !fk_inmueble) {
@@ -64,8 +63,7 @@ postRenta: (req, res) => {
         "titulo_publicacion",
         "descripcion_publicacion",
         "estado_publicacion",
-        "fk_vendedor",
-        "fk_inmueble"
+        "fk_vendedor"
       ]
     });
   }
@@ -90,9 +88,8 @@ postRenta: (req, res) => {
       descripcion_publicacion,
       estado_publicacion,
       tipo_inmueble,
-      fk_vendedor,
-      fk_inmueble
-    ) VALUES (?, ?, ?, ?, ?, ?)
+      fk_vendedor
+    ) VALUES (?, ?, ?, ?, ?)
   `;
 
   const values = [
@@ -100,8 +97,7 @@ postRenta: (req, res) => {
     descripcion_publicacion,
     estado_publicacion,
     tipo_inmueble,
-    fk_vendedor,
-    fk_inmueble
+    fk_vendedor
   ];
 
   connection.query(query, values, (err, results) => {
