@@ -38,51 +38,57 @@ module.exports = {
     }
   },
 
-getVenta: (req, res) => {
-  const { id } = req.params;
-  let query = `
-      SELECT 
-          vp.* , GROUP_CONCAT(ip.img_ruta) AS imagenes
-      FROM venta_publicaciones vp
-      LEFT JOIN imagenes_publicacion ip ON vp.id_publicacion_venta = ip.fk_publicacion_venta`;
-  let queryParams = [];
+  getVenta: (req, res) => {
+    const { id } = req.params;
+    let query = `
+        SELECT 
+            vp.*, 
+            GROUP_CONCAT(ip.img_ruta) AS imagenes, 
+            u.telefono_usuario
+        FROM venta_publicaciones vp
+        LEFT JOIN imagenes_publicacion ip 
+            ON vp.id_publicacion_venta = ip.fk_publicacion_venta
+        LEFT JOIN usuarios u 
+            ON vp.fk_usuario = u.id_usuario`;
+    let queryParams = [];
   
-  // Si se proporciona un ID, filtrar la consulta
-  if (id) {
-      query += " WHERE vp.id_publicacion_venta = ?";
-      queryParams.push(id);
-  }
-
-  // Agrupar por la publicación para manejar las imágenes relacionadas
-  query += " GROUP BY vp.id_publicacion_venta";
-
-  try {
-      const connection = mysql.createConnection(connectionObject);
-      connection.query(query, queryParams, (err, results, fields) => {
-          if (!err) {
-              if (results.length > 0) {
-                  // Transformar las imágenes de BLOB a base64 y separarlas en un array
-                  const formattedResults = results.map(result => ({
-                      ...result,
-                      imagenes: result.imagenes 
-                          ? result.imagenes.split(',').map(img => Buffer.from(img, 'binary').toString('base64')) 
-                          : []
-                  }));
-                  res.json(formattedResults);
-              } else {
-                  res.status(404).json({ message: "No se encontró la publicación de venta con el ID proporcionado" });
-              }
-          } else {
-              console.error("Error al ejecutar la consulta:", err);
-              res.status(500).json({ message: "Error al obtener las ventas" });
-          }
-          connection.end();
-      });
-  } catch (e) {
-      console.error("Error al procesar la solicitud:", e);
-      res.status(500).json({ message: "Error al obtener las ventas" });
-  }
-},
+    // Si se proporciona un ID, filtrar la consulta
+    if (id) {
+        query += " WHERE vp.id_publicacion_venta = ?";
+        queryParams.push(id);
+    }
+  
+    // Agrupar por la publicación para manejar las imágenes relacionadas
+    query += " GROUP BY vp.id_publicacion_venta";
+  
+    try {
+        const connection = mysql.createConnection(connectionObject);
+        connection.query(query, queryParams, (err, results, fields) => {
+            if (!err) {
+                if (results.length > 0) {
+                    // Transformar las imágenes de BLOB a base64 y separarlas en un array
+                    const formattedResults = results.map(result => ({
+                        ...result,
+                        imagenes: result.imagenes 
+                            ? result.imagenes.split(',').map(img => Buffer.from(img, 'binary').toString('base64')) 
+                            : []
+                    }));
+                    res.json(formattedResults);
+                } else {
+                    res.status(404).json({ message: "No se encontró la publicación de venta con el ID proporcionado" });
+                }
+            } else {
+                console.error("Error al ejecutar la consulta:", err);
+                res.status(500).json({ message: "Error al obtener las ventas" });
+            }
+            connection.end();
+        });
+    } catch (e) {
+        console.error("Error al procesar la solicitud:", e);
+        res.status(500).json({ message: "Error al obtener las ventas" });
+    }
+  },
+  
 postVenta: (req, res) => {
   const {
     titulo_publicacion,
@@ -98,7 +104,7 @@ postVenta: (req, res) => {
     amueblado,
     descripcion_publicacion,
     tipo_inmueble,
-    fk_vendedor,
+    fk_usuario,
   } = req.body;
 
   // Validación de campos requeridos
@@ -145,25 +151,25 @@ postVenta: (req, res) => {
       amueblado,
       descripcion_publicacion,
       tipo_inmueble,
-      fk_vendedor
+      fk_usuario
     ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
   `;
 
   const values = [
     titulo_publicacion,
-    precio_inmueble || null,
-    calle_inmueble || null,
-    colonia_inmueble || null,
-    cp_inmueble || null,
-    terreno_inmueble || null,
-    habitaciones || null,
-    baños_int || null,
+    precio_inmueble,
+    calle_inmueble,
+    colonia_inmueble,
+    cp_inmueble,
+    terreno_inmueble,
+    habitaciones,
+    baños_int,
     pisos,
     garage,
     amueblado,
     descripcion_publicacion,
     tipo_inmueble,
-    fk_vendedor,
+    fk_usuario,
   ];
 
   connection.query(query, values, (err, results) => {
