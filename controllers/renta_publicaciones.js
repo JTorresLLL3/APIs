@@ -53,17 +53,17 @@ postRenta: (req, res) => {
     descripcion_publicacion,
     estado_publicacion,
     tipo_inmueble,
-    fk_vendedor,
+    fk_usuario,
   } = req.body;
 
-  if (!titulo_publicacion || !descripcion_publicacion || estado_publicacion === undefined || !fk_vendedor || !fk_inmueble) {
+  if (!titulo_publicacion || !descripcion_publicacion || estado_publicacion === undefined || !fk_usuario) {
     return res.status(400).json({
       message: "Todos los campos requeridos deben estar presentes",
       required_fields: [
         "titulo_publicacion",
         "descripcion_publicacion",
         "estado_publicacion",
-        "fk_vendedor"
+        "fk_usuario"
       ]
     });
   }
@@ -88,7 +88,7 @@ postRenta: (req, res) => {
       descripcion_publicacion,
       estado_publicacion,
       tipo_inmueble,
-      fk_vendedor
+      fk_usuario
     ) VALUES (?, ?, ?, ?, ?)
   `;
 
@@ -97,7 +97,7 @@ postRenta: (req, res) => {
     descripcion_publicacion,
     estado_publicacion,
     tipo_inmueble,
-    fk_vendedor
+    fk_usuario
   ];
 
   connection.query(query, values, (err, results) => {
@@ -114,11 +114,11 @@ postRenta: (req, res) => {
     }
 
     res.status(201).json({
-      message: "Publicación de venta creada exitosamente",
+      message: "Publicación de renta creada exitosamente",
       id: results.insertId,
       data: {
         ...req.body,
-        id_publicacion_venta: results.insertId
+        id_publicacion_renta: results.insertId
       }
     });
 
