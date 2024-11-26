@@ -34,7 +34,7 @@ app.get("/venta_publicaciones/:id", ventaController.getVenta);
 app.get("/venta_publicaciones", ventaController.getVentas);
 app.post("/venta_publicacion", jsonParser, ventaController.postVenta);
 
-renta_publicaciones
+// renta_publicaciones
 app.get("/renta_publicaciones/:id", rentaController.getRenta);
 app.get("/renta_publicaciones", rentaController.getRentas);
 app.post("/renta_publicaciones", jsonParser, rentaController.postRenta);
